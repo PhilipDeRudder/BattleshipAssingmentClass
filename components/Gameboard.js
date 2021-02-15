@@ -62,11 +62,11 @@ export default class Gameboard extends Component {
     }
 
     drawItem(number) {
-        //hier kijken of het een hit is
+        //hier kijken of het een hit is andgv number parameter
         if (this.state.Gamestatus) {
             if (board[number] === Start && this.winGame() === "") {
                 board[number] = this.state.isCross ? Cross : Circle
-                this.setState({ isCross: !this.state.isCross })
+                this.setState({ isCross: !this.state.isCross, bombs: this.state.bombs -1 })
                 if (this.winGame() !== "") {
                     this.setState({ winner: this.winGame() })
                 }
@@ -139,6 +139,7 @@ export default class Gameboard extends Component {
         this.interval = setInterval(() => this.updateSeconds(), 1000);
     }
 
+    //seconden updaten
     updateSeconds() {
         this.setState(state => ({
             timer: state.timer + 1
