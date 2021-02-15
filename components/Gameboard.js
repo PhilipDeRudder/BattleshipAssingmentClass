@@ -21,16 +21,20 @@ export default class Gameboard extends Component{
             isCross:true,
             winner:'',
             Gamestatus: false,
-            buttonText: 'Start game',
+            buttonText: 'Start Game',
             statusText:'Game has not started',
             hits:0,
             bombs:15,
             ships:3,
-            time: 30
+            timer: 0
 
         }
         this.initializeBoard();
     }
+
+    
+      
+
 
     //we gaan het bord tekenen door een plus te tekenen in elke cel van het bord
     initializeBoard(){
@@ -84,16 +88,34 @@ export default class Gameboard extends Component{
         this.setState({
             isCross: true,
             Gamestatus: false,
-            statusText: 'Game has not started'
+            statusText: 'Game has not started',
+            timer:0,
+            buttonText: "Start Game"
         })
+        clearInterval(this.interval);
         this.initializeBoard();
     }
 
     StartGame(){
-        this.setState({
-            Gamestatus: true,
-            statusText: 'Game on'
-        })
+        if(this.state.buttonText === "Start Game"){
+            this.setState({
+                Gamestatus: true,
+                statusText: 'Game on',
+                buttonText: "New Game"
+            })
+            this.Timer();
+        }
+        else if(this.state.buttonText === "New Game"){
+            this.resetGame();
+        }
+
+    }
+
+    Timer(){
+        this.interval = setInterval(
+            () => this.setState((prevState)=> ({ timer: prevState.timer + 1 })),
+            1000
+          );
     }
 
 
@@ -135,8 +157,9 @@ export default class Gameboard extends Component{
                 </Pressable>
             )
         }
+        
         for(let i = numb_rows * 5; i < numb_rows *5; i++){
-            fourthRow.push(
+            fifthRow.push(
                 <Pressable key={i} style={styles.row} onPress={() => this.drawItem(i)}>
                     <Entypo key={i} name={board[i]} size={32} color={this.chooseItemComor(i)}></Entypo>
                 </Pressable>
@@ -151,11 +174,11 @@ export default class Gameboard extends Component{
                <View style={styles.flex}>{thirdRow}</View>
                <View style={styles.flex}>{fourthRow}</View>
                <View style={styles.flex}>{fifthRow}</View>
-               <Pressable style={styles.button} onPress={()=> this.resetGame()}>
-                   <Text style={styles.buttonText}>Restart Game</Text>
+               <Pressable style={styles.button} onPress={()=> this.StartGame()}>
+                   <Text style={styles.buttonText}>{this.state.buttonText}</Text>
                </Pressable>
                <Text style={styles.gameinfo}>Hits: {this.state.hits} Bombs: {this.state.bombs} Ships: {this.state.ships}</Text>
-               <Text style={styles.gameinfo}>Time: {this.state.time} seconds </Text>
+               <Text style={styles.gameinfo}>Time: {this.state.timer} seconds </Text>
                 <Text>{this.state.statusText}</Text>
             </View>
         )
