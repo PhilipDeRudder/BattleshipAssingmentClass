@@ -66,7 +66,8 @@ export default class Gameboard extends Component {
         if (this.state.Gamestatus) {
             if (board[number] === Start && this.winGame() === "") {
                 board[number] = this.state.isCross ? Cross : Circle
-                this.setState({ isCross: !this.state.isCross, bombs: this.state.bombs -1 })
+                this.setState({ isCross: !this.state.isCross })
+                this.setState({ bombs: this.state.bombs - 1 })
                 if (this.winGame() !== "") {
                     this.setState({ winner: this.winGame() })
                 }
