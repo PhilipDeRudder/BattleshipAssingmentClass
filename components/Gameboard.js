@@ -45,19 +45,15 @@ export default class Gameboard extends Component {
     }
 
     winGame() {
-
-        //check if ship is hit
-        //we hebben array van posities waar de schepen zich bevinden --> vergelijken met de posities waarop ze gedrukt hebben 
-        //indien hit --> hit +1
-        // indien niet niks
-        // sws bombs -1
-        // 
-
-        if (3 === 4) {
-            return board[0]
-        } else {
+        if(this.state.hits >= 3){
+            return "winner"
+        }else if (this.state.bombs<=0){
+            this.GameOver();
+            return "loser"
+        }else{
             return ""
         }
+       
 
     }
 
@@ -65,9 +61,24 @@ export default class Gameboard extends Component {
         //hier kijken of het een hit is andgv number parameter
         if (this.state.Gamestatus) {
             if (board[number] === Start && this.winGame() === "") {
-                board[number] = this.state.isCross ? Cross : Circle
-                this.setState({ isCross: !this.state.isCross })
                 this.setState({ bombs: this.state.bombs - 1 })
+                let isHit = false;
+                for(let i =0; i< this.state.shipPositions.length;i++){
+                    if(this.state.shipPositions[i] === number){
+                        isHit = true;
+                    }
+                }
+                if(isHit){
+                    board[number] = Circle
+                    this.setState({ hits: this.state.hits + 1 })
+
+                
+                }else{
+                    board[number] = Cross
+                }
+
+               // board[number] = this.state.isCross ? Cross : Circle
+               // this.setState({ isCross: !this.state.isCross })
                 if (this.winGame() !== "") {
                     this.setState({ winner: this.winGame() })
                 }
@@ -128,6 +139,7 @@ export default class Gameboard extends Component {
     }
 
     GameOver() {
+        clearInterval(this.interval);
         this.setState({
             Gamestatus: false,
             statusText: 'Game over. Ships remaining',
