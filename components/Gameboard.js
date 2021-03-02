@@ -44,6 +44,7 @@ export default class Gameboard extends Component {
         }
     }
 
+    // function used in drawitem to see if game is won or not
     winGame() {
         if (this.state.hits > 2) {
             this.gameWon();
@@ -58,11 +59,14 @@ export default class Gameboard extends Component {
 
     }
 
+    // draws cross or circle depending if it was a hit or not
+    // also check if the game was already started
     drawItem(number) {
-        //hier kijken of het een hit is andgv number parameter
         if (this.state.Gamestatus) {
             if (board[number] === Start && this.winGame() === "") {
+                // reduce the number of bombs
                 this.setState({ bombs: this.state.bombs - 1 })
+                // used indexof to check if a sertain ship was hit or not --> -1 if not hit
                 if (this.state.shipPositions.indexOf(number) != -1) {
                     board[number] = Circle
                     this.setState({ hits: this.state.hits + 1 })
@@ -85,8 +89,7 @@ export default class Gameboard extends Component {
 
     }
 
-
-    // neemt een nummer als argument adhv de user die aan de beurt is 
+    // function to set color of cross and circle
     chooseItemComor(number) {
         if (board[number] === Cross) {
             return "#FF3031"
@@ -98,7 +101,7 @@ export default class Gameboard extends Component {
         }
     }
 
-    // deze functie zal alles terug naar het origineel zetten
+    // this function will reset the game
     resetGame() {
         this.setState({
             isCross: true,
@@ -115,6 +118,7 @@ export default class Gameboard extends Component {
         this.initializeBoard();
     }
 
+    // function to set al startvalues
     StartGame() {
         if (this.state.buttonText === "Start Game") {
             this.setState({
@@ -131,6 +135,7 @@ export default class Gameboard extends Component {
 
     }
 
+    // funciton if game over --> ships remaining and no bombs left
     GameOver() {
         clearInterval(this.interval);
         this.setState({
@@ -140,6 +145,7 @@ export default class Gameboard extends Component {
         })
     }
 
+    // if time is ran out
     gameOverTimeOut() {
         clearInterval(this.interval);
         this.setState({
@@ -150,7 +156,8 @@ export default class Gameboard extends Component {
     }
 
 
-    gameWon(){
+    // sinked all the ships
+    gameWon() {
         clearInterval(this.interval);
         this.setState({
             Gamestatus: false,
@@ -160,11 +167,12 @@ export default class Gameboard extends Component {
     }
 
 
+    // timer function
     Timer() {
         this.interval = setInterval(() => this.updateSeconds(), 1000);
     }
 
-    //seconden updaten
+    //update every second + check if time is still remaining
     updateSeconds() {
         this.setState(state => ({
             timer: state.timer + 1
@@ -176,8 +184,7 @@ export default class Gameboard extends Component {
         }
     }
 
-    //posities van de schepen zetten
-    //TODO: do while om te kijken of de gekozen posities al bestaan 
+    // set random positions for all ships
     ChooseRandomPosition() {
         for (let i = 0; i < 3; i++) {
             let randomNumber = Math.floor(Math.random() * 24 + 0);
