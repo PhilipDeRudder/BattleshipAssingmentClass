@@ -63,6 +63,16 @@ export default class Gameboard extends Component {
             if (board[number] === Start && this.winGame() === "") {
                 this.setState({ bombs: this.state.bombs - 1 })
                 let isHit = false;
+                // TODO: dit veranderen naar indexof
+                if(this.state.shipPositions.indexOf(number)!= -1){
+                    board[number] = Circle
+                    this.setState({ hits: this.state.hits + 1 })
+                    this.setState({ ships: this.state.ships - 1 })
+
+                }else{
+                    board[number] = Cross
+                }
+                /*
                 for(let i =0; i< this.state.shipPositions.length;i++){
                     if(this.state.shipPositions[i] === number){
                         isHit = true;
@@ -76,7 +86,7 @@ export default class Gameboard extends Component {
                 }else{
                     board[number] = Cross
                 }
-
+                */
                // board[number] = this.state.isCross ? Cross : Circle
                // this.setState({ isCross: !this.state.isCross })
                 if (this.winGame() !== "") {
@@ -113,7 +123,7 @@ export default class Gameboard extends Component {
             statusText: 'Game has not started',
             timer: 0,
             buttonText: "Start Game",
-            ships: 0,
+            ships: 3,
             bombs: 15,
             hits: 0,
             shipPositions: []
