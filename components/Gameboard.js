@@ -45,15 +45,15 @@ export default class Gameboard extends Component {
     }
 
     winGame() {
-        if(this.state.hits >= 3){
+        if (this.state.hits >= 3) {
             return "winner"
-        }else if (this.state.bombs<=0){
+        } else if (this.state.bombs <= 0) {
             this.GameOver();
             return "loser"
-        }else{
+        } else {
             return ""
         }
-       
+
 
     }
 
@@ -62,33 +62,15 @@ export default class Gameboard extends Component {
         if (this.state.Gamestatus) {
             if (board[number] === Start && this.winGame() === "") {
                 this.setState({ bombs: this.state.bombs - 1 })
-                let isHit = false;
-                // TODO: dit veranderen naar indexof
-                if(this.state.shipPositions.indexOf(number)!= -1){
+                if (this.state.shipPositions.indexOf(number) != -1) {
                     board[number] = Circle
                     this.setState({ hits: this.state.hits + 1 })
                     this.setState({ ships: this.state.ships - 1 })
 
-                }else{
+                } else {
                     board[number] = Cross
                 }
-                /*
-                for(let i =0; i< this.state.shipPositions.length;i++){
-                    if(this.state.shipPositions[i] === number){
-                        isHit = true;
-                    }
-                }
-                if(isHit){
-                    board[number] = Circle
-                    this.setState({ hits: this.state.hits + 1 })
 
-                
-                }else{
-                    board[number] = Cross
-                }
-                */
-               // board[number] = this.state.isCross ? Cross : Circle
-               // this.setState({ isCross: !this.state.isCross })
                 if (this.winGame() !== "") {
                     this.setState({ winner: this.winGame() })
                 }
