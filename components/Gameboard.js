@@ -45,9 +45,10 @@ export default class Gameboard extends Component {
     }
 
     winGame() {
-        if (this.state.hits >= 3) {
+        if (this.state.hits > 2) {
+            this.gameWon();
             return "winner"
-        } else if (this.state.bombs <= 0) {
+        } else if (this.state.bombs < 1) {
             this.GameOver();
             return "loser"
         } else {
@@ -139,6 +140,25 @@ export default class Gameboard extends Component {
         })
     }
 
+    gameOverTimeOut() {
+        clearInterval(this.interval);
+        this.setState({
+            Gamestatus: false,
+            statusText: 'Timeout. Ships remaining',
+            buttonText: "New Game"
+        })
+    }
+
+
+    gameWon(){
+        clearInterval(this.interval);
+        this.setState({
+            Gamestatus: false,
+            statusText: 'You sinked all ships.',
+            buttonText: "New Game"
+        })
+    }
+
 
     Timer() {
         this.interval = setInterval(() => this.updateSeconds(), 1000);
@@ -151,7 +171,7 @@ export default class Gameboard extends Component {
         }));
 
         if (this.state.timer === 30) {
-            this.GameOver();
+            this.gameOverTimeOut();
             clearInterval(this.interval);
         }
     }
@@ -161,7 +181,7 @@ export default class Gameboard extends Component {
     ChooseRandomPosition() {
         for (let i = 0; i < 3; i++) {
             let randomNumber = Math.floor(Math.random() * 24 + 0);
-
+            console.log(randomNumber);
             this.state.shipPositions.push(randomNumber);
         }
 
